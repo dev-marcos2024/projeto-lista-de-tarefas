@@ -84,8 +84,13 @@ img:hover{
 
 .msg-erro{
    
-    background-color: rgba(255, 0, 0, 0.788);
+    background-color: rgb(247, 0, 0);
     text-align: center;
     font-size: 1.3em;
     padding: .5em;
+    color: #ebe96e;
+    box-shadow: 0 0 10px #201f1f;
+    border-radius: 0 0 10px 10px;
+    text-transform: uppercase;
+    font-weight: bold;
 }
