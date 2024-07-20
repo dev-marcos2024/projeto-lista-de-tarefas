@@ -1,24 +1,37 @@
-
-
 let input = document.querySelector('#tarefas')
 let btn = document.querySelector('#btn')
 let lista = document.querySelector('#lista-tarefas')
+let menssagemErro = false
 
 // Criando o evento do clique do botao
 btn.onclick = function(){
 
-    let li = document.createElement('li')
-    li.appendChild(document.createTextNode(input.value))
-    
-    let deletar = criarBtnDelet()
+    if (input.value){
+        
+        removerMsgErro();
 
-    let div = document.createElement('div')
-    div.appendChild(li);
-    div.appendChild(deletar)
-    div.className = 'conteudo-lista'
+        let li = document.createElement('li')
+        li.appendChild(document.createTextNode(input.value))
+        
+        let deletar = criarBtnDelet()
 
-    lista.appendChild(div)
+        let div = document.createElement('div')
+        div.appendChild(li);
+        div.appendChild(deletar)
+        div.className = 'conteudo-lista'
 
+        lista.appendChild(div)
+    }else{
+
+            if(!menssagemErro){
+                let erro = document.createElement('span')
+                erro.className = 'msg-erro'
+                 erro.innerHTML = 'Opção invalida e necessario digitar uma tarefa'
+                document.querySelector('.main-contener').appendChild(erro)
+                menssagemErro = true
+            }
+    }
+   
     input.value = ""
 }
 
@@ -40,7 +53,18 @@ function criarBtnDelet(){
 
 // Função par remover uma linha
 function removeElemento(item){
+    removerMsgErro()
     lista.removeChild(item)
 }
+
+// fução para remover menssagem de Erro
+function removerMsgErro(){
+    if(menssagemErro){
+        document.querySelector('.msg-erro').remove()
+        menssagemErro = false
+    }
+}
+
+
 
 
