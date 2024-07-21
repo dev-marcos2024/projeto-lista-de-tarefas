@@ -2,36 +2,12 @@ let input = document.querySelector('#tarefas')
 let btn = document.querySelector('#btn')
 let lista = document.querySelector('#lista-tarefas')
 let menssagemErro = false
+let listaTarefas = []
+
 
 // Criando o evento do clique do botao
 btn.onclick = function(){
-
-    if (input.value){
-        
-        removerMsgErro();
-
-        let li = document.createElement('li')
-        li.appendChild(document.createTextNode(input.value))
-        
-        let deletar = criarBtnDelet()
-
-        let div = document.createElement('div')
-        div.appendChild(li);
-        div.appendChild(deletar)
-        div.className = 'conteudo-lista'
-
-        lista.appendChild(div)
-    }else{
-
-            if(!menssagemErro){
-                let erro = document.createElement('span')
-                erro.className = 'msg-erro'
-                 erro.innerHTML = 'Opção invalida e necessario digitar uma tarefa'
-                document.querySelector('.main-contener').appendChild(erro)
-                menssagemErro = true
-            }
-    }
-   
+    addLine(input.value)
     input.value = ""
 }
 
@@ -46,15 +22,19 @@ function criarBtnDelet(){
     // Adicionando a imagem ao botao
     var anchor = document.createElement('a');
     anchor.style.cursor = 'pointer'
-    anchor.setAttribute('onclick', 'removeElemento(this.parentNode, "lista-tarefas")')
+    anchor.setAttribute('onclick', 'removeElemento(this.parentNode)')
     anchor.appendChild(img)
     return anchor
 }
 
 // Função par remover uma linha
 function removeElemento(item){
+    let chave = item.firstChild.innerHTML;
+    listaTarefas.splice(listaTarefas.indexOf(chave),1)
+    localStorage.setItem('tarefas', JSON.stringify(listaTarefas))
     removerMsgErro()
     lista.removeChild(item)
+
 }
 
 // fução para remover menssagem de Erro
@@ -64,6 +44,51 @@ function removerMsgErro(){
         menssagemErro = false
     }
 }
+
+// Adicionando uma linha na lista.
+function addLine(valueInput){
+    let lengthli = document.querySelectorAll('li').length || 0;
+    if (valueInput){
+        removerMsgErro();
+
+        let li = document.createElement('li')
+        li.appendChild(document.createTextNode(valueInput))
+        
+        let deletar = criarBtnDelet()
+
+        let div = document.createElement('div')
+        div.appendChild(li);
+        div.appendChild(deletar)
+        div.className = 'conteudo-lista'
+
+        lista.appendChild(div)
+
+        listaTarefas.push(valueInput)
+
+        localStorage.setItem('tarefas', JSON.stringify(listaTarefas))
+    }else{
+            if(!menssagemErro){
+                let erro = document.createElement('span')
+                erro.className = 'msg-erro'
+                 erro.innerHTML = 'Opção invalida e necessario digitar uma tarefa'
+                document.querySelector('.main-contener').appendChild(erro)
+                menssagemErro = true
+            }
+    }
+}
+
+// Caregando dados do banco de dados do navegador
+function carregarDados(){
+    if (JSON.parse(localStorage.getItem('tarefas')) !== null){
+        for (tarefa of JSON.parse(localStorage.getItem('tarefas'))) {
+            addLine(tarefa)
+        }
+    }
+    
+}
+
+carregarDados()
+
 
 
 
